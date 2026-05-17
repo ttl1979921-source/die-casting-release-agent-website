@@ -159,8 +159,97 @@ function initializeSelector() {
   });
 }
 
+function initializeNavigation() {
+  const body = document.body;
+  const mobileToggle = document.querySelector(".mobile-menu-toggle");
+  const navItems = document.querySelectorAll(".nav-item");
+
+  if (mobileToggle) {
+    mobileToggle.addEventListener("click", () => {
+      const isOpen = mobileToggle.getAttribute("aria-expanded") === "true";
+      mobileToggle.setAttribute("aria-expanded", String(!isOpen));
+      body.classList.toggle("menu-open", !isOpen);
+    });
+  }
+
+  navItems.forEach((item) => {
+    const trigger = item.querySelector(".nav-trigger");
+
+    if (!trigger) {
+      return;
+    }
+
+    trigger.addEventListener("click", () => {
+      const isOpen = item.classList.contains("is-open");
+
+      navItems.forEach((otherItem) => {
+        otherItem.classList.remove("is-open");
+        const otherTrigger = otherItem.querySelector(".nav-trigger");
+        if (otherTrigger) {
+          otherTrigger.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      item.classList.toggle("is-open", !isOpen);
+      trigger.setAttribute("aria-expanded", String(!isOpen));
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    if (event.target.closest(".site-nav") || event.target.closest(".mobile-menu-toggle")) {
+      return;
+    }
+
+    navItems.forEach((item) => {
+      item.classList.remove("is-open");
+      const trigger = item.querySelector(".nav-trigger");
+      if (trigger) {
+        trigger.setAttribute("aria-expanded", "false");
+      }
+    });
+  });
+
+  document.querySelectorAll(".site-nav a").forEach((link) => {
+    link.addEventListener("click", () => {
+      body.classList.remove("menu-open");
+      if (mobileToggle) {
+        mobileToggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  });
+}
+
+function initializeRevealAnimations() {
+  const revealItems = document.querySelectorAll(".reveal");
+
+  if (!revealItems.length) {
+    return;
+  }
+
+  if (!("IntersectionObserver" in window)) {
+    revealItems.forEach((item) => item.classList.add("is-visible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.14 }
+  );
+
+  revealItems.forEach((item) => observer.observe(item));
+}
+
 if (typeof document !== "undefined") {
   initializeSelector();
+  initializeNavigation();
+  initializeRevealAnimations();
 }
 
 if (typeof window !== "undefined") {
