@@ -385,7 +385,7 @@ a:focus-visible {
 }
 
 .application-solution-card h3,
-gallery-card h3 {
+.gallery-card h3 {
   margin: 0;
   color: var(--navy);
   font-size: 20px;
