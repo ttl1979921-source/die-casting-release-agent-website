@@ -250,77 +250,66 @@ const newsFeeds = {
   "die-casting": {
     label: "Die Casting",
     url:
-      "https://news.google.com/rss/search?q=die%20casting%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
+      "https://news.google.com/search?q=die%20casting%20when%3A7d&hl=en-US&gl=US&ceid=US:en",
+    topics: [
+      "Global die casting industry updates",
+      "Die casting release agents and production process news",
+      "Aluminium and magnesium die casting technology"
+    ]
   },
   hpdc: {
     label: "HPDC",
     url:
-      "https://news.google.com/rss/search?q=high%20pressure%20die%20casting%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
+      "https://news.google.com/search?q=high%20pressure%20die%20casting%20when%3A7d&hl=en-US&gl=US&ceid=US:en",
+    topics: [
+      "High pressure die casting production news",
+      "Large structural aluminium casting updates",
+      "HPDC machine, tooling and process technology"
+    ]
   },
   foundry: {
     label: "Foundry Technology",
     url:
-      "https://news.google.com/rss/search?q=foundry%20technology%20die%20casting%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
+      "https://news.google.com/search?q=foundry%20technology%20die%20casting%20when%3A7d&hl=en-US&gl=US&ceid=US:en",
+    topics: [
+      "Foundry technology and advanced manufacturing news",
+      "Casting automation, process monitoring and quality control",
+      "Metal casting sustainability and production efficiency"
+    ]
   }
 };
 
-function buildNewsFallback(list, status, feed) {
+function renderNewsSearchCards(list, status, feed) {
   list.innerHTML = "";
 
-  const item = document.createElement("article");
-  item.className = "news-item";
-
-  const label = document.createElement("span");
-  label.textContent = "Live search";
-
-  const title = document.createElement("h3");
-  title.textContent = `${feed.label} news search is ready`;
-
-  const body = document.createElement("p");
-  body.textContent =
-    "The live feed could not be loaded in this browser. Open the global news search to see the latest results.";
-
-  const link = document.createElement("a");
-  link.href = feed.url.replace("/rss/search", "/search");
-  link.target = "_blank";
-  link.rel = "noopener noreferrer";
-  link.textContent = "Open global news ->";
-
-  item.append(label, title, body, link);
-  list.append(item);
-  status.textContent = "Live feed unavailable here. Use the global news link for real-time results.";
-}
-
-function renderNewsItems(list, items) {
-  list.innerHTML = "";
-
-  items.slice(0, 6).forEach((entry) => {
+  feed.topics.forEach((topic) => {
     const item = document.createElement("article");
     item.className = "news-item";
 
-    const source = document.createElement("span");
-    source.textContent = entry.author || "Global news";
+    const label = document.createElement("span");
+    label.textContent = "Live global search";
 
     const title = document.createElement("h3");
-    title.textContent = entry.title || "Die casting news update";
+    title.textContent = topic;
 
-    const published = document.createElement("p");
-    published.textContent = entry.pubDate
-      ? `Published: ${new Date(entry.pubDate).toLocaleDateString()}`
-      : "Latest industry update";
+    const body = document.createElement("p");
+    body.textContent =
+      "Open this live news search to see the latest global results from the past 7 days.";
 
     const link = document.createElement("a");
-    link.href = entry.link;
+    link.href = feed.url;
     link.target = "_blank";
     link.rel = "noopener noreferrer";
-    link.textContent = "Read article ->";
+    link.textContent = "Open live results ->";
 
-    item.append(source, title, published, link);
+    item.append(label, title, body, link);
     list.append(item);
   });
+
+  status.textContent = `Live ${feed.label} news searches are ready. Results open in Google News.`;
 }
 
-async function loadNews(feedKey = "die-casting") {
+function loadNews(feedKey = "die-casting") {
   const list = document.querySelector("#liveNewsList");
   const status = document.querySelector("#newsStatus");
   const feed = newsFeeds[feedKey] || newsFeeds["die-casting"];
@@ -329,27 +318,7 @@ async function loadNews(feedKey = "die-casting") {
     return;
   }
 
-  status.textContent = `Loading latest ${feed.label} news...`;
-
-  try {
-    const endpoint = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`;
-    const response = await fetch(endpoint);
-
-    if (!response.ok) {
-      throw new Error("News feed request failed");
-    }
-
-    const data = await response.json();
-
-    if (!data.items || !data.items.length) {
-      throw new Error("No news items returned");
-    }
-
-    renderNewsItems(list, data.items);
-    status.textContent = `Showing latest global ${feed.label} news from public news search.`;
-  } catch (error) {
-    buildNewsFallback(list, status, feed);
-  }
+  renderNewsSearchCards(list, status, feed);
 }
 
 function ensureNewsWindowStyles() {
@@ -418,7 +387,7 @@ function ensureNewsWindowMarkup() {
         <button type="button" class="news-source" data-feed="hpdc">HPDC</button>
         <button type="button" class="news-source" data-feed="foundry">Foundry Technology</button>
       </div>
-      <div class="news-status" id="newsStatus">Loading global die casting news...</div>
+      <div class="news-status" id="newsStatus">Preparing global die casting news searches...</div>
       <div class="news-list" id="liveNewsList">
         <article class="news-item news-item--placeholder">
           <span>Live feed</span>
