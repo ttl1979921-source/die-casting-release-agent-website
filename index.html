@@ -8,6 +8,10 @@
       name="description"
       content="Technical release agents, plunger lubricants and metalworking fluids for aluminium, magnesium and precision manufacturing applications."
     />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230061a8'/%3E%3Cpath d='M14 18h36v8H24v7h20v8H24v15H14z' fill='white'/%3E%3Cpath d='M42 33h8v23h-8z' fill='%2300a99d'/%3E%3C/svg%3E"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -299,6 +303,61 @@
             <div><strong>Review</strong><span>Sample testing required</span></div>
           </div>
         </aside>
+      </section>
+
+      <section class="section news-window-section" id="global-news">
+        <div class="news-window reveal" aria-live="polite">
+          <div class="news-window__header">
+            <div>
+              <p class="section-label">Global Die Casting News</p>
+              <h2>Live industry news window</h2>
+              <p>
+                A front-end news window for global die casting, high-pressure die casting,
+                foundry technology and advanced manufacturing updates.
+              </p>
+            </div>
+            <div class="news-actions">
+              <button class="button button-primary news-refresh" type="button" id="refreshNews">
+                Refresh News <span aria-hidden="true">-></span>
+              </button>
+              <a
+                class="button button-secondary news-link"
+                href="https://news.google.com/search?q=die%20casting%20OR%20high%20pressure%20die%20casting%20when%3A7d&hl=en-US&gl=US&ceid=US%3Aen"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Open Global News <span aria-hidden="true">-></span>
+              </a>
+            </div>
+          </div>
+
+          <div class="news-source-tabs" aria-label="News topics">
+            <button type="button" class="news-source is-active" data-feed="die-casting">
+              Die Casting
+            </button>
+            <button type="button" class="news-source" data-feed="hpdc">
+              HPDC
+            </button>
+            <button type="button" class="news-source" data-feed="foundry">
+              Foundry Technology
+            </button>
+          </div>
+
+          <div class="news-status" id="newsStatus">
+            Preparing global die casting news searches...
+          </div>
+
+          <div class="news-list" id="liveNewsList">
+            <article class="news-item news-item--placeholder">
+              <span>Live feed</span>
+              <h3>Global die casting news will appear here when the public feed is available.</h3>
+              <p>
+                If the live feed is blocked by browser or network policy, use the global news
+                button to open the latest search results.
+              </p>
+            </article>
+          </div>
+        </div>
       </section>
 
       <section class="section product-section" id="products">
